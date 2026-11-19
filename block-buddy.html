@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Block Buddy – Where is Block 34?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f3f5fb;--card:#fff;--ink:#222d7a;--text:#1b1f3b;--pencil:#5a6075;--line:#cdd3e8;--mark:#f2b705;--markink:#3a2c00;--grass:#e3ecdc;--road:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#12142b;--card:#1b1e3d;--ink:#b8c1ff;--text:#eceefc;--pencil:#a7acc6;--line:#343a68;--grass:#1c2a26;--road:#2a2f55;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#12142b;--card:#1b1e3d;--ink:#b8c1ff;--text:#eceefc;--pencil:#a7acc6;--line:#343a68;--grass:#1c2a26;--road:#2a2f55;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--text);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100vh;display:flex;justify-content:center}
+.app{width:100%;max-width:420px;min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+h1,h2{margin:0}
+/* login */
+.login{flex:1;padding:56px 24px 24px;display:flex;flex-direction:column}
+.login h1{font-size:2.3rem;line-height:1.05;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.login p.sub{color:var(--pencil);margin:12px 0 36px;max-width:30ch}
+.box{border:2px solid var(--ink);border-radius:6px;background:var(--card)}
+.box .bar{padding:14px 16px;border-bottom:2px solid var(--ink);font-weight:800;font-size:1.3rem;color:var(--ink)}
+.box .body{padding:18px 16px 20px;display:grid;gap:12px}
+.field{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--ink)}
+.field label{color:var(--pencil);white-space:nowrap}
+.field input{flex:1;min-width:0;border:0;background:transparent;padding:10px 4px;font-size:1.1rem;letter-spacing:.04em}
+.field input:focus{outline:none}
+.err{color:#c0392b;font-size:.9rem;min-height:1.2em;margin:0}
+@media (prefers-color-scheme:dark){.err{color:#ff8a7a}}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:6px;padding:13px 16px;font-weight:600}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.hint{margin-top:auto;color:var(--pencil);font-size:.85rem;padding-top:24px}
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--ink);background:var(--card)}
+.who{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-weight:800;color:var(--ink);font-size:1.1rem}
+.who svg{width:34px;height:34px}
+.who small{display:block;font-weight:400;color:var(--pencil);font-size:.75rem;text-align:left}
+.nav{display:flex;gap:6px}
+.nav button{display:grid;justify-items:center;gap:1px;width:56px;padding:6px 0;border:2px solid var(--ink);border-radius:6px;background:transparent;color:var(--ink);font-size:.72rem}
+.nav button[aria-current="page"]{background:var(--ink);color:var(--paper)}
+.nav svg{width:22px;height:22px}
+/* home */
+.home{padding:22px 18px 28px;display:grid;gap:18px}
+.home h2{font-size:1.5rem;color:var(--ink)}
+.search{position:relative}
+.sbox{display:flex;border:2px solid var(--ink);border-radius:6px;background:var(--card)}
+.sbox span{display:grid;place-items:center;width:44px;border-right:2px solid var(--ink);color:var(--ink)}
+.sbox input{flex:1;min-width:0;border:0;background:transparent;padding:12px;font-size:1.1rem}
+.sbox input:focus{outline:none}
+.sbox button{width:44px;border:0;border-left:2px solid var(--ink);background:transparent;color:var(--ink)}
+.list{position:absolute;z-index:5;left:0;right:0;top:100%;margin:4px 0 0;padding:4px;list-style:none;background:var(--card);border:2px solid var(--ink);border-radius:6px;max-height:240px;overflow:auto}
+.list li button{width:100%;text-align:left;border:0;background:transparent;padding:10px;border-radius:4px;display:flex;justify-content:space-between;gap:8px}
+.list li button:hover,.list li button:focus-visible{background:var(--paper)}
+.list em{font-style:normal;color:var(--pencil);font-size:.85rem}
+.card{border:2px solid var(--ink);border-radius:6px;background:var(--card);padding:16px}
+.card .row1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h3{margin:0;font-size:1.6rem;color:var(--ink);font-weight:800}
+.pill{border:2px solid var(--ink);border-radius:99px;padding:3px 12px;font-size:.8rem;background:var(--mark);color:var(--markink);border-color:var(--markink)}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:14px 0 0}
+.card dt{color:var(--pencil)}
+.card dd{margin:0;font-weight:600}
+.card .name{color:var(--pencil);margin:2px 0 0}
+.card .actions{display:flex;gap:8px;margin-top:14px}
+.card .actions .btn{flex:1}
+.start label{display:block;margin-bottom:6px;color:var(--ink);font-weight:600}
+.start select{width:100%;padding:12px;border:2px solid var(--ink);border-radius:6px;background:var(--card);font-size:1rem}
+.note{color:var(--pencil);font-size:.85rem;margin:0}
+/* map */
+.maphead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:2px solid var(--ink);background:var(--card)}
+.maphead h2{font-size:1.2rem;color:var(--ink);display:flex;gap:8px;align-items:center}
+.maphead button{background:none;border:0;color:var(--ink);font-weight:600;padding:6px}
+.mapwrap{position:relative;flex:1;min-height:420px;overflow:hidden;background:var(--grass);perspective:700px}
+.mapwrap svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .5s;transform-origin:50% 85%}
+.mapwrap.d3 svg{transform:rotateX(48deg) scale(1.05)}
+.blk{cursor:pointer}
+.blk rect{fill:var(--card);stroke:var(--ink);stroke-width:2}
+.blk.dest rect{fill:var(--mark);stroke:var(--markink)}
+.blk text{fill:var(--text);font-size:9px;pointer-events:none}
+.blk.dest text{fill:var(--markink)}
+.tools{display:grid;grid-template-columns:auto 1fr auto;gap:0;border-top:2px solid var(--ink);background:var(--card)}
+.tools>*{padding:10px 12px;border-right:2px solid var(--ink);display:flex;align-items:center;gap:8px}
+.tools>*:last-child{border-right:0}
+.tools select{border:0;background:transparent;padding:0 2px}
+.step{font-weight:600}
+.step small{display:block;color:var(--pencil);font-weight:400}
+.step .ar{font-size:1.5rem;color:var(--ink);line-height:1}
+.zoom{gap:4px!important}
+.zoom button{width:32px;height:32px;border:2px solid var(--ink);border-radius:6px;background:transparent;color:var(--ink);font-weight:800}
+.left{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:2px solid var(--ink);background:var(--card);font-weight:600}
+.left strong{font-size:1.6rem;color:var(--ink)}
+.walk{padding:10px 16px 18px;background:var(--card);border-top:1px dashed var(--line);display:flex;gap:12px;align-items:center}
+.walk input{flex:1;accent-color:var(--ink)}
+.walk .btn{padding:8px 14px}
+dialog{border:2px solid var(--ink);border-radius:8px;background:var(--card);color:var(--text);padding:16px;max-width:360px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(10,12,30,.55)}
+dialog h3{margin:0 0 8px;color:var(--ink)}
+dialog svg{width:100%;height:auto;border-radius:6px;background:var(--grass)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:99px;font-weight:600;z-index:20}
+@media (prefers-reduced-motion:reduce){.mapwrap svg{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Screen 1: login -->
+<main id="login" class="login">
+  <h1>Welcome to Block Buddy</h1>
+  <p class="sub">Find any block on campus without asking around.</p>
+  <div class="box">
+    <div class="bar">Log in</div>
+    <div class="body">
+      <div class="field"><label for="reg">Reg. no.</label><input id="reg" inputmode="text" autocomplete="off" placeholder="e.g. 12345678"></div>
+      <p class="err" id="err" role="alert"></p>
+      <button class="btn" id="go">Log in</button>
+    </div>
+  </div>
+  <p class="hint">Prototype: enter any registration number with 6 to 12 letters or digits.</p>
+</main>
+
+<!-- Screen 2: find your block -->
+<section id="home" hidden>
+  <header class="top">
+    <button class="who" id="prof" aria-label="Profile">
+      <svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2"><circle cx="17" cy="17" r="15"/><circle cx="17" cy="13" r="5"/><path d="M7 28c2-6 18-6 20 0"/></svg>
+      <span>Profile<small id="regshow"></small></span>
+    </button>
+    <nav class="nav" aria-label="Main">
+      <button id="navmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.500-7 12-7 12z"/><circle cx="12" cy="9" r="2.500"/></svg>map</button>
+      <button id="navhome" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8v10H3z"/><path d="M10 21v-6h4v6"/></svg>home</button>
+    </nav>
+  </header>
+  <div class="home">
+    <h2>Find your block</h2>
+    <div class="search">
+      <div class="sbox">
+        <span aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/></svg></span>
+        <input id="q" aria-label="Search block number or name" autocomplete="off" value="34">
+        <button id="drop" aria-label="Show all blocks" aria-expanded="false">▾</button>
+      </div>
+      <ul class="list" id="list" hidden></ul>
+    </div>
+    <article class="card" id="card" aria-live="polite"></article>
+    <div class="start">
+      <label for="from">Starting from</label>
+      <select id="from"></select>
+    </div>
+    <p class="note">Tap the map button when you’re ready to walk.</p>
+    <button class="btn" id="showmap">Show me the way</button>
+  </div>
+</section>
+
+<!-- Screen 3: map -->
+<section id="mapscr" hidden style="display:flex;flex-direction:column;flex:1">
+  <header class="maphead">
+    <h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.500-7-12a7 7 0 0 1 14 0c0 5.500-7 12-7 12z"/><circle cx="12" cy="9" r="2.500"/></svg>Map</h2>
+    <button id="back">← Go back</button>
+  </header>
+  <div class="mapwrap" id="mapwrap"><svg id="svg" viewBox="0 0 360 520" role="img" aria-label="Campus map with route"></svg></div>
+  <div class="tools">
+    <label>View <select id="view" aria-label="Map view"><option value="2">2-D</option><option value="3">3-D</option></select></label>
+    <div class="step" id="step"></div>
+    <div class="zoom"><span>Zoom</span><button id="zi" aria-label="Zoom in">+</button><button id="zo" aria-label="Zoom out">−</button></div>
+  </div>
+  <div class="left"><span>Distance left</span><strong id="left">300 m</strong></div>
+  <div class="walk"><input type="range" id="prog" min="0" max="1000" value="0" aria-label="Walk along the route"><button class="btn" id="play">Walk it</button></div>
+</section>
+
+<dialog id="dlg"><h3 id="dt"></h3><div id="dbody"></div><p id="dland" class="note"></p><p><button class="btn alt" id="dclose">Close</button></p></dialog>
+</div>
+
+<script>
+const SCALE=2.4; // metres per map unit
+const GATE={id:'gate',name:'Main Gate',label:'Main Gate',pt:[180,480]};
+const B=[
+ {id:'34',name:'Computer Science',floor:'Ground to 4th floor',side:'R',y:[345,415],dy:380,land:'Glass front door, right beside the Library.'},
+ {id:'30',name:'Administration',floor:'Ground and 1st floor',side:'R',y:[105,185],dy:145,land:'Flag pole outside the entrance.'},
+ {id:'18',name:'Canteen',floor:'Ground floor',side:'R',y:[215,295],dy:255,land:'Open courtyard with benches.'},
+ {id:'12',name:'Mechanical Workshop',floor:'Ground floor',side:'L',y:[215,295],dy:255,land:'Tall shutter doors and a yellow railing.'},
+ {id:'9',name:'Library',floor:'Ground to 3rd floor',side:'L',y:[345,415],dy:380,land:'Wide steps and a book-stand at the gate.'},
+ {id:'5',name:'Hostel Office',floor:'Ground floor',side:'L',y:[105,185],dy:145,land:'Blue notice board near the door.'}
+];
+const SPINE=[480,380,255,145];
+const $=id=>document.getElementById(id);
+let reg='',dest=B[0],from=GATE,zoom=1,path=[],cum=[],total=0,prog=0,timer=null;
+
+const bx=b=>b.side==='R'?205:75;
+const door=b=>[b.side==='R'?205:155,b.dy];
+const startPt=s=>s.id==='gate'?GATE.pt:door(s);
+
+function show(id){['login','home','mapscr'].forEach(s=>{const e=$(s);e.hidden=s!==id;if(s==='mapscr')e.style.display=s===id?'flex':'none'});window.scrollTo(0,0)}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+
+/* login */
+function login(){
+  const v=$('reg').value.trim();
+  if(!/^[A-Za-z0-9]{6,12}$/.test(v)){$('err').textContent='Enter 6 to 12 letters or digits, with no spaces.';return}
+  reg=v.toUpperCase();$('err').textContent='';$('regshow').textContent='Reg. no. '+reg;show('home');renderHome();
+}
+$('go').onclick=login;$('reg').onkeydown=e=>{if(e.key==='Enter')login()};
+
+/* search */
+function fillList(filter=''){
+  const f=filter.trim().toLowerCase();
+  const m=B.filter(b=>!f||b.id.startsWith(f)||b.name.toLowerCase().includes(f)||('block '+b.id).includes(f));
+  const l=$('list');l.innerHTML='';
+  if(!m.length){l.innerHTML='<li style="padding:10px;color:var(--pencil)">No block matches. Try a number from 5 to 34.</li>'}
+  m.forEach(b=>{const li=document.createElement('li');li.innerHTML=`<button type="button"><span>Block ${b.id}</span><em>${b.name}</em></button>`;li.firstChild.onclick=()=>pick(b);l.appendChild(li)});
+  l.hidden=false;$('drop').setAttribute('aria-expanded','true');
+}
+function closeList(){$('list').hidden=true;$('drop').setAttribute('aria-expanded','false')}
+function pick(b){dest=b;$('q').value=b.id;closeList();if(from.id===b.id)from=GATE;renderHome();resetWalk()}
+$('q').oninput=e=>fillList(e.target.value);
+$('q').onfocus=e=>{e.target.select();fillList('')};
+$('drop').onclick=()=>$('list').hidden?fillList(''):closeList();
+document.addEventListener('click',e=>{if(!e.target.closest('.search'))closeList()});
+$('q').onkeydown=e=>{if(e.key==='Enter'){const f=B.find(b=>b.id===$('q').value.trim());if(f)pick(f)}};
+
+function renderHome(){
+  routeCalc();
+  $('card').innerHTML=`<div class="row1"><h3>Block ${dest.id}</h3><span class="pill">Destination</span></div>
+   <p class="name">${dest.name}</p>
+   <dl><dt>Floor</dt><dd>${dest.floor}</dd><dt>Distance</dt><dd>${Math.round(total)} m from ${from.name}</dd></dl>
+   <div class="actions"><button class="btn alt" id="img">Images</button></div>`;
+  $('img').onclick=()=>openImg(dest);
+  const s=$('from');s.innerHTML='';
+  [GATE,...B.filter(b=>b.id!==dest.id)].forEach(o=>{const op=document.createElement('option');op.value=o.id;op.textContent=o.id==='gate'?'Main Gate':`Block ${o.id} – ${o.name}`;if(o.id===from.id)op.selected=true;s.appendChild(op)});
+}
+$('from').onchange=e=>{from=e.target.value==='gate'?GATE:B.find(b=>b.id===e.target.value);renderHome();resetWalk()};
+
+/* routing */
+function routeCalc(){
+  const a=startPt(from),dy=dest.dy,ds=door(dest);
+  let pts=[a];
+  if(from.id!=='gate')pts.push([180,from.dy]);
+  const y0=from.id==='gate'?480:from.dy;
+  const mid=SPINE.filter(y=>(y0>dy?(y<y0&&y>dy):(y>y0&&y<dy)));
+  mid.sort((p,q)=>y0>dy?q-p:p-q).forEach(y=>pts.push([180,y]));
+  pts.push([180,dy]);pts.push(ds);
+  path=pts.filter((p,i)=>i===0||p[0]!==pts[i-1][0]||p[1]!==pts[i-1][1]);
+  cum=[0];for(let i=1;i<path.length;i++)cum.push(cum[i-1]+Math.hypot(path[i][0]-path[i-1][0],path[i][1]-path[i-1][1]));
+  total=cum[cum.length-1]*SCALE;
+}
+function at(d){ // d in map units
+  const L=cum[cum.length-1];d=Math.max(0,Math.min(L,d));
+  let i=1;while(i<cum.length-1&&cum[i]<d)i++;
+  const t=(d-cum[i-1])/((cum[i]-cum[i-1])||1),p=path[i-1],q=path[i];
+  return{pt:[p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t],seg:i};
+}
+
+/* map */
+function drawMap(){
+  const L=cum[cum.length-1],cur=at(L*prog),y=cur.pt;
+  const w=360/zoom,h=520/zoom;
+  let vx=Math.max(0,Math.min(360-w,y[0]-w/2)),vy=Math.max(0,Math.min(520-h,y[1]-h/2));
+  if(zoom===1){vx=0;vy=0}
+  const sv=$('svg');sv.setAttribute('viewBox',`${vx} ${vy} ${w} ${h}`);
+  let s=`<rect x="0" y="0" width="360" height="520" fill="var(--grass)"/>
+   <rect x="168" y="70" width="24" height="430" rx="6" fill="var(--road)" stroke="var(--line)" stroke-width="1.500"/>
+   <text x="180" y="508" text-anchor="middle" font-size="9" fill="var(--pencil)">Main Gate</text>`;
+  B.forEach(b=>{const w2=80;s+=`<g class="blk${b.id===dest.id?' dest':''}" tabindex="0" role="button" aria-label="Block ${b.id}, ${b.name}. Show images" data-id="${b.id}"><rect x="${bx(b)}" y="${b.y[0]}" width="${w2}" height="${b.y[1]-b.y[0]}" rx="3"/><text x="${bx(b)+w2/2}" y="${(b.y[0]+b.y[1])/2-3}" text-anchor="middle" font-weight="700" font-size="10">Block ${b.id}</text><text x="${bx(b)+w2/2}" y="${(b.y[0]+b.y[1])/2+10}" text-anchor="middle">${b.name.length>13?b.name.split(' ')[0]:b.name}</text></g>`});
+  const pts=path.map(p=>p.join(',')).join(' ');
+  s+=`<polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="3.500" stroke-dasharray="2 7" stroke-linecap="round"/>`;
+  const e=path[path.length-1];
+  s+=`<g transform="translate(${e[0]} ${e[1]}) scale(${1/zoom})"><circle r="6" fill="var(--mark)" stroke="var(--markink)" stroke-width="2"/></g>`;
+  s+=`<g transform="translate(${y[0]} ${y[1]}) scale(${1/zoom})"><path d="M0 0C-9-12-12-18-12-24a12 12 0 1 1 24 0C12-18 9-12 0 0z" fill="var(--ink)"/><circle cy="-24" r="4.500" fill="var(--paper)"/><text x="15" y="-17" font-size="12" font-weight="700" fill="var(--text)">You</text></g>`;
+  sv.innerHTML=s;
+  sv.querySelectorAll('.blk').forEach(g=>{const b=B.find(x=>x.id===g.dataset.id);g.onclick=()=>openImg(b);g.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openImg(b)}}});
+  // instructions
+  const rem=Math.max(0,Math.round(total*(1-prog)));
+  $('left').textContent=rem+' m';
+  let main='Go straight',sub='',ar='↑';
+  if(prog>=0.999){main='You’ve arrived';sub=`Block ${dest.id} is here`;ar='✓'}
+  else{
+    const i=cur.seg,d1=[path[i][0]-path[i-1][0],path[i][1]-path[i-1][1]];
+    const toEnd=Math.round((cum[i]-L*prog)*SCALE);
+    if(i<path.length-1){
+      const d2=[path[i+1][0]-path[i][0],path[i+1][1]-path[i][1]];
+      const cr=d1[0]*d2[1]-d1[1]*d2[0];
+      if(Math.abs(cr)>1){const r=cr>0;sub=`Turn ${r?'right':'left'} in ${toEnd} m`;ar=r?'→':'←'}else sub=`Keep going ${toEnd} m`;
+    }else sub=`Block ${dest.id} in ${toEnd} m`;
+  }
+  $('step').innerHTML=`<span class="ar">${ar}</span> ${main}<small>${sub}</small>`;
+  $('prog').value=Math.round(prog*1000);
+}
+function resetWalk(){clearInterval(timer);timer=null;prog=0;$('play').textContent='Walk it'}
+$('prog').oninput=e=>{prog=e.target.value/1000;drawMap()};
+$('play').onclick=()=>{
+  if(timer){clearInterval(timer);timer=null;$('play').textContent='Walk it';return}
+  if(prog>=1)prog=0;$('play').textContent='Pause';
+  timer=setInterval(()=>{prog=Math.min(1,prog+0.004);drawMap();if(prog>=1){clearInterval(timer);timer=null;$('play').textContent='Walk again'}},50);
+};
+$('zi').onclick=()=>{zoom=Math.min(3,zoom+.5);drawMap()};
+$('zo').onclick=()=>{zoom=Math.max(1,zoom-.5);drawMap()};
+$('view').onchange=e=>$('mapwrap').classList.toggle('d3',e.target.value==='3');
+
+/* images dialog */
+function openImg(b){
+  $('dt').textContent=`Block ${b.id} · ${b.name}`;
+  $('dbody').innerHTML=`<svg viewBox="0 0 320 190" role="img" aria-label="Illustration of Block ${b.id}"><rect y="150" width="320" height="40" fill="var(--road)"/><rect x="50" y="30" width="220" height="120" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>${[0,1,2].map(r=>[0,1,2,3,4].map(c=>`<rect x="${66+c*38}" y="${42+r*30}" width="24" height="18" fill="none" stroke="var(--ink)" stroke-width="2"/>`).join('')).join('')}<rect x="142" y="112" width="36" height="38" fill="var(--mark)" stroke="var(--markink)" stroke-width="2"/><rect x="110" y="8" width="100" height="20" rx="3" fill="var(--ink)"/><text x="160" y="23" text-anchor="middle" font-size="13" font-weight="700" fill="var(--paper)">Block ${b.id}</text></svg>`;
+  $('dland').textContent='How to spot it: '+b.land+' Photo placeholder for the prototype.';
+  $('dlg').showModal();
+}
+$('dclose').onclick=()=>$('dlg').close();
+
+/* nav */
+function openMap(){routeCalc();$('navmap');show('mapscr');zoom=1;drawMap()}
+$('showmap').onclick=openMap;$('navmap').onclick=openMap;
+$('back').onclick=()=>{resetWalk();show('home');renderHome()};
+$('navhome').onclick=()=>{show('home')};
+$('prof').onclick=()=>toast('Signed in as '+reg);
+</script>
+</body>
+</html>
